@@ -1,0 +1,30 @@
+{
+    "name": "Go",
+    "dockerComposeFile": [
+        "./docker-compose.yaml"
+    ],
+    "service": "dev",
+    "workspaceFolder": "/workspaces/sqlc-example",
+    "shutdownAction": "stopCompose",
+    "features": {
+        "docker-from-docker": {
+            "version": "latest",
+            "moby": true
+        }
+    },
+    "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh", 
+        "terminal.integrated.profiles.linux": {
+            "zsh": {
+                "path": "/bin/zsh"
+            },
+        },
+        "files.eol": "\n",
+    },
+    "extensions": [
+        "golang.Go",
+        "2gua.rainbow-brackets",
+        "oderwat.indent-rainbow",
+        "yzhang.markdown-all-in-one"
+    ],
+}
