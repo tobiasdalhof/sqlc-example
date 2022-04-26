@@ -4,7 +4,7 @@ This repository contains example code for [sqlc](https://github.com/kyleconroy/s
 
 ## Todo
 
-- [ ] Add example that demonstrates the usage of sqlc generated code
+- [x] Add example that demonstrates the usage of sqlc generated code
 - [ ] Add database test example that uses [dockertest](https://github.com/ory/dockertest)
 
 ## Generate Go code from SQL
