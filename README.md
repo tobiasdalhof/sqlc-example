@@ -6,6 +6,7 @@ This repository contains example code for [sqlc](https://github.com/kyleconroy/s
 
 - [x] Add example that demonstrates the usage of sqlc generated code
 - [x] Add database test example
+- [ ] Add automated tests with GitHub actions
 
 ## Generate Go code from SQL
 
