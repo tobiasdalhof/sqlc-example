@@ -11,3 +11,8 @@ migrate_down:
 
 sqlc:
 	sqlc generate
+
+test:
+	go test ./...
+
+.PHONY: migration migrate_up migrate_down sqlc test
