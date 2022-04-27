@@ -13,11 +13,11 @@ services:
       dockerfile: Dockerfile
       context: .
     volumes:
-      - ..:/workspaces/sqlc-example
+      - .:/workspaces/sqlc-example
     command: sleep infinity
 
   postgres:
-    image: postgres:13
+    image: postgres:13-alpine
     volumes:
       - postgres:/var/lib/postgresql/data
     ports:
@@ -28,7 +28,7 @@ services:
       - POSTGRES_PASSWORD=secret
 
   postgres-test:
-    image: postgres:13
+    image: postgres:13-alpine
     volumes:
       - postgres-test:/var/lib/postgresql/data
     ports:
