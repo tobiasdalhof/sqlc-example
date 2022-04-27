@@ -46,11 +46,7 @@ func setupDatabase() {
 		log.Fatalf("could not create migration db instance: %s", err)
 	}
 
-	err = m.Down()
-	if err != nil {
-		log.Fatalf("migrate down failed: %s", err)
-	}
-
+	m.Down()
 	err = m.Up()
 	if err != nil {
 		log.Fatalf("migrate up failed: %s", err)
