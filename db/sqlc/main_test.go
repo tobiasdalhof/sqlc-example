@@ -22,7 +22,7 @@ func TestMain(m *testing.M) {
 }
 
 func setupDatabase() {
-	db, err := sql.Open("postgres", "host=postgres-test port=5432 user=default password=secret dbname=default sslmode=disable")
+	db, err := sql.Open("postgres", "host=postgres-test user=default password=secret dbname=default sslmode=disable")
 	if err != nil {
 		log.Fatalf("could not open database connection: %s", err)
 	}
