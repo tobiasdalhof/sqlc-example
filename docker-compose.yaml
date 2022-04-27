@@ -14,6 +14,7 @@ services:
       context: .
     volumes:
       - .:/workspaces/sqlc-example
+    working_dir: /workspaces/sqlc-example
     command: sleep infinity
 
   postgres:
