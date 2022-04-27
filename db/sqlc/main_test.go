@@ -2,49 +2,59 @@ package db
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"os"
 	"testing"
-	"time"
 
+	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq"
-	"github.com/ory/dockertest/v3"
 )
 
 var queries *Queries
 
 func TestMain(m *testing.M) {
-	setupPostgres()
+	setupDatabase()
 	code := m.Run()
 	os.Exit(code)
 }
 
-func setupPostgres() {
-	pool, err := dockertest.NewPool("")
+func setupDatabase() {
+	db, err := sql.Open("postgres", "host=postgres-test port=5432 user=default password=secret dbname=default sslmode=disable")
 	if err != nil {
-		log.Fatalf("could not connect to docker: %s", err)
+		log.Fatalf("could not open database connection: %s", err)
+	}
+	err = db.Ping()
+	if err != nil {
+		log.Fatalf("could not ping database: %s", err)
 	}
 
-	_, err = pool.Run("postgres", "13", []string{
-		"POSTGRES_DB=default",
-		"POSTGRES_USER=default",
-		"POSTGRES_PASSWORD=secret",
-	})
+	driver, err := postgres.WithInstance(db, &postgres.Config{})
 	if err != nil {
-		log.Fatalf("could not start resource: %s", err)
+		log.Fatalf("could not create postgres migration driver: %s", err)
 	}
 
-	pool.MaxWait = 10 * time.Second
-	err = pool.Retry(func() error {
-		db, err := sql.Open("postgres", "host=postgres user=default password=secret dbname=default sslmode=disable")
-		if err != nil {
-			return err
-		}
-		queries = New(db)
-		return db.Ping()
-	})
-
+	path, _ := os.Getwd()
 	if err != nil {
-		log.Fatalf("could not connect to postgres container: %s", err)
+		log.Fatalf("could not get working directory: %s", err)
 	}
+
+	m, err := migrate.NewWithDatabaseInstance(fmt.Sprintf("file:///%s/../migrations", path), "postgres", driver)
+	if err != nil {
+		log.Fatalf("could not create migration db instance: %s", err)
+	}
+
+	err = m.Down()
+	if err != nil {
+		log.Fatalf("migrate down failed: %s", err)
+	}
+
+	err = m.Up()
+	if err != nil {
+		log.Fatalf("migrate up failed: %s", err)
+	}
+
+	queries = New(db)
 }
